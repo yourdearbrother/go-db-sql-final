@@ -46,7 +46,7 @@ func (s ParcelService) Register(client int, address string) (Parcel, error) {
 
 	parcel.Number = id
 
-	fmt.Printf("Новая посылка № %d на адрес %s от клиента с идентификатором %d зарегестрирована %s\n",
+	fmt.Printf("Новая посылка № %d на адрес %s от клиента с идентификатором %d зарегистрирована %s\n",
 		parcel.Number, parcel.Address, parcel.Client, parcel.CreatedAt)
 
 	return parcel, nil
@@ -60,7 +60,7 @@ func (s ParcelService) ClientsParcel(client int) error {
 
 	fmt.Println()
 	for _, item := range list {
-		fmt.Printf("Посылка № %d на адрес %s от клиента с идентификатором %d зарегестрирована %s, статус %s\n",
+		fmt.Printf("Посылка № %d на адрес %s от клиента с идентификатором %d зарегистрирована %s, статус %s\n",
 			item.Number, item.Address, item.Client, item.CreatedAt, item.Status)
 	}
 	fmt.Println()
