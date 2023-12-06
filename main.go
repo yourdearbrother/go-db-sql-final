@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"errors"
 	"fmt"
 	"time"
 
@@ -58,7 +57,7 @@ func (s ParcelService) ClientsParcel(client int) error {
 		return err
 	}
 
-	fmt.Println()
+	fmt.Printf("Посылки клиента %d:\n", client)
 	for _, item := range list {
 		fmt.Printf("Посылка № %d на адрес %s от клиента с идентификатором %d зарегистрирована %s, статус %s\n",
 			item.Number, item.Address, item.Client, item.CreatedAt, item.Status)
@@ -84,7 +83,7 @@ func (s ParcelService) NextStatus(number int) error {
 		return nil
 	}
 
-	fmt.Printf("У посылки %d новый статус: %s\n", number, nextStatus)
+	fmt.Printf("У посылки № %d новый статус: %s\n", number, nextStatus)
 
 	return s.store.SetStatus(number, nextStatus)
 }
@@ -108,44 +107,66 @@ func main() {
 	address := "Псков, д. Пушкина, ул. Колотушкина, д. 5"
 	p, err := service.Register(client, address)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
 	// изменение адреса
-	newAddress := "Псков, д. Пушкина, ул. Колотушкина, д. 25"
+	newAddress := "Саратов, д. Верхние Зори, ул. Козлова, д. 25"
 	err = service.ChangeAddress(p.Number, newAddress)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
 	// изменение статуса
 	err = service.NextStatus(p.Number)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
 	// вывод посылок клиента
 	err = service.ClientsParcel(client)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
 	// попытка удаления отправленной посылки
 	err = service.Delete(p.Number)
-	if err == nil {
-		errMsg := "произошли нежелательные изменения: удалилась посылка со статусом, отличным от «registered»"
-		panic(errors.New(errMsg))
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	// вывод посылок клиента
+	// предыдущая посылка не должна удалиться, т.к. её статус НЕ «зарегистрирована»
+	err = service.ClientsParcel(client)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 	// регистрация новой посылки
 	p, err = service.Register(client, address)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
 
 	// удаление новой посылки
 	err = service.Delete(p.Number)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
+	}
+
+	// вывод посылок клиента
+	// здесь не должно быть последней посылки, т.к. она должна была успешно удалиться
+	err = service.ClientsParcel(client)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 }

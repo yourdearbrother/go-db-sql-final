@@ -41,7 +41,6 @@ func (s ParcelStore) GetByClient(client int) ([]Parcel, error) {
 
 func (s ParcelStore) SetStatus(number int, status string) error {
 	// реализуйте обновление статуса в таблице parcel
-	// верните ошибку, если ни одна из строк не была обновлена
 
 	return nil
 }
@@ -49,7 +48,6 @@ func (s ParcelStore) SetStatus(number int, status string) error {
 func (s ParcelStore) SetAddress(number int, address string) error {
 	// реализуйте обновление адреса в таблице parcel
 	// менять адрес можно только если значение статуса registered
-	// верните ошибку, если ни одна из строк не была обновлена
 
 	return nil
 }
@@ -57,7 +55,6 @@ func (s ParcelStore) SetAddress(number int, address string) error {
 func (s ParcelStore) Delete(number int) error {
 	// реализуйте удаление строки из таблицы parcel
 	// удалять строку можно только если значение статуса registered
-	// верните ошибку, если ни одна из строк не была удалена
 
 	return nil
 }
