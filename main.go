@@ -51,16 +51,16 @@ func (s ParcelService) Register(client int, address string) (Parcel, error) {
 	return parcel, nil
 }
 
-func (s ParcelService) ClientsParcel(client int) error {
-	list, err := s.store.GetByClient(client)
+func (s ParcelService) PrintClientParcels(client int) error {
+	parcels, err := s.store.GetByClient(client)
 	if err != nil {
 		return err
 	}
 
 	fmt.Printf("Посылки клиента %d:\n", client)
-	for _, item := range list {
+	for _, parcel := range parcels {
 		fmt.Printf("Посылка № %d на адрес %s от клиента с идентификатором %d зарегистрирована %s, статус %s\n",
-			item.Number, item.Address, item.Client, item.CreatedAt, item.Status)
+			parcel.Number, parcel.Address, parcel.Client, parcel.CreatedAt, parcel.Status)
 	}
 	fmt.Println()
 
@@ -127,7 +127,7 @@ func main() {
 	}
 
 	// вывод посылок клиента
-	err = service.ClientsParcel(client)
+	err = service.PrintClientParcels(client)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -142,7 +142,7 @@ func main() {
 
 	// вывод посылок клиента
 	// предыдущая посылка не должна удалиться, т.к. её статус НЕ «зарегистрирована»
-	err = service.ClientsParcel(client)
+	err = service.PrintClientParcels(client)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -164,7 +164,7 @@ func main() {
 
 	// вывод посылок клиента
 	// здесь не должно быть последней посылки, т.к. она должна была успешно удалиться
-	err = service.ClientsParcel(client)
+	err = service.PrintClientParcels(client)
 	if err != nil {
 		fmt.Println(err)
 		return
