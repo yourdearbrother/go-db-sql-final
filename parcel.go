@@ -24,7 +24,7 @@ func (s ParcelStore) Add(p Parcel) (int, error) {
 	}
 
 	lastIndex, err := res.LastInsertId()
-
+	// Что значит не разрывать строку? Имеется ввиду лишние пустые строки до и после lastIndex?
 	if err != nil {
 		return 0, err
 	}
@@ -88,7 +88,7 @@ func (s ParcelStore) SetAddress(number int, address string) error {
 	_, err := s.db.Exec("UPDATE parcel SET address = :address WHERE number = :number AND status = :status",
 		sql.Named("address", address),
 		sql.Named("number", number),
-		sql.Named("status", "registered"))
+		sql.Named("status", ParcelStatusRegistered))
 
 	if err != nil {
 		return err
@@ -100,7 +100,7 @@ func (s ParcelStore) SetAddress(number int, address string) error {
 func (s ParcelStore) Delete(number int) error {
 	_, err := s.db.Exec("DELETE FROM parcel WHERE number = :number AND status = :status",
 		sql.Named("number", number),
-		sql.Named("status", "registered"))
+		sql.Named("status", ParcelStatusRegistered))
 
 	if err != nil {
 		return err

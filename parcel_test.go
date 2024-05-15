@@ -6,6 +6,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -123,7 +124,7 @@ func TestGetByClient(t *testing.T) {
 
 	for _, parcel := range storedParcels {
 		newParcel, exist := parcelMap[parcel.Number]
-		require.True(t, exist)
+		assert.True(t, exist)
 		require.Equal(t, newParcel, parcel)
 	}
 }
